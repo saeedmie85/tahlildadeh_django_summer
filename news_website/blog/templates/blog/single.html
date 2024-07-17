@@ -1,2 +1,5 @@
+{% if post.thumbnail %}
+            <img src = "{{post.thumbnail.url}}", width = "800", height= "400">
+        {% endif %}
 <p>{{post.title}}</p>
 <p>{{post.body}}</p>

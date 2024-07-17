@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 
 def post_list(request):
     posts = Post.objects.filter(status = 'published')
-    return render(request,'blog/home.html',{'posts':posts})
+    return render(request,'blog/index.html',{'posts':posts})
 
 def post_detail(request,slug):
     # post = Post.objects.get(id = pk)
