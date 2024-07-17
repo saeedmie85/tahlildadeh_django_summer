@@ -1,0 +1,14 @@
+<html>
+<head>
+    <title>اولین پروژه من</title>
+</head>
+<body>
+    {% for post in posts %}
+        <h1> <a href = "{% url 'blog:post_detail' post.slug %}">{{post.title}}</a> </h1>
+        <h3>نویسنده: {{post.author.get_full_name}}</h3>
+        <p> {{post.body|truncatechars:30}} </p>
+    
+    {% endfor %}
+</body>
+</html>
+

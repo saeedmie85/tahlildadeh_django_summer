@@ -8,6 +8,7 @@ class Post(models.Model):
         ('published','منتشر شده')
     )
     title = models.CharField(max_length=250,verbose_name='عنوان')
+    thumbnail = models.ImageField(upload_to= 'image', null = True, blank=True, verbose_name='تصویر')
     slug = models.SlugField(max_length=300)
     body = models.TextField(verbose_name='متن',null = True)
     author = models.ForeignKey(User,on_delete=models.CASCADE,
@@ -23,3 +24,6 @@ class Post(models.Model):
         ordering = ('-publish',)
         verbose_name = 'مقاله'
         verbose_name_plural = 'مقالات'
+
+    def __str__(self):
+        return self.title
