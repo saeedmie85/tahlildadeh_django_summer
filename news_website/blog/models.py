@@ -26,7 +26,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250,verbose_name='عنوان')
     category = models.ManyToManyField(Category, verbose_name='دسته بندی')
     thumbnail = models.ImageField(upload_to= 'image', null = True, blank=True, verbose_name='تصویر')
-    slug = models.SlugField(max_length=300, unique_for_date= True)
+    slug = models.SlugField(max_length=300, unique= True)
     body = models.TextField(verbose_name='متن',null = True)
     author = models.ForeignKey(User,on_delete=models.CASCADE,
                                related_name='blog_posts',
@@ -44,3 +44,8 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_category(self):
+        return ', '.join([cat.title for cat in self.category.all()])
+    
+    get_category.short_description = 'دسته بندی'
