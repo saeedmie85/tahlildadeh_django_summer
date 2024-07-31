@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.urls import reverse
+
 # Create your models here.
 class Category(models.Model):
     title = models.CharField(max_length=50,verbose_name='عنوان دسته بندی')
@@ -15,6 +17,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("blog:category_list", kwargs={"category_slug": self.slug})
 
 
 
@@ -49,3 +54,9 @@ class Post(models.Model):
         return ', '.join([cat.title for cat in self.category.all()])
     
     get_category.short_description = 'دسته بندی'
+
+    def get_absolute_url(self):
+        return reverse("blog:post_detail", kwargs={"year": self.publish.year,
+                                                   "month":self.publish.month,
+                                                   'day':self.publish.day,
+                                                   'slug':self.slug})
