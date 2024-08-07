@@ -39,10 +39,12 @@ def post_detail(request, year, month, day, slug, comment_id=None):
         if comment_form.is_valid():
             comment = comment_form.save(commit=False)
             comment.post = post
+            comment.active = False
             comment.save()
     else:
         comment_form = CommentForm()
         if comment_id:
+            print("*" * 20)
             comment = get_object_or_404(Comment, id=comment_id)
             comment_form = CommentForm(instance=comment)
 
