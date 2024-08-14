@@ -3,12 +3,13 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 from extensions.utils import jalali_converter
+from taggit.managers import TaggableManager
 
 
 # Create your models here.
 class Category(models.Model):
     title = models.CharField(max_length=50, verbose_name="عنوان دسته بندی")
-    slug = models.SlugField(max_length=300, unique=True)
+    slug = models.SlugField(max_length=300, unique=True, allow_unicode=True)
     is_visible = models.BooleanField(default=True)
     position = models.IntegerField()
 
@@ -29,9 +30,9 @@ class Post(models.Model):
     title = models.CharField(max_length=250, verbose_name="عنوان")
     category = models.ManyToManyField(Category, verbose_name="دسته بندی")
     thumbnail = models.ImageField(
-        upload_to="image", null=True, blank=True, verbose_name="تصویر"
+        upload_to="image/%y/%m/%d", null=True, blank=True, verbose_name="تصویر"
     )
-    slug = models.SlugField(max_length=300, unique=True)
+    slug = models.SlugField(max_length=300, unique=True, allow_unicode=True)
     body = models.TextField(verbose_name="متن", null=True)
     author = models.ForeignKey(
         User,
@@ -48,6 +49,7 @@ class Post(models.Model):
         default="draft",
         verbose_name="وضعیت انتشار",
     )
+    tags = TaggableManager()
 
     class Meta:
         ordering = ("-publish",)

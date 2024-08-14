@@ -42,12 +42,12 @@
 
         <div class="blog-title-area">
             <div class="tag-cloud-single">
-                <span>Tags</span>
-                <small><a href="#" title="">lifestyle</a></small>
-                <small><a href="#" title="">colorful</a></small>
-                <small><a href="#" title="">trending</a></small>
-                <small><a href="#" title="">another tag</a></small>
-            </div><!-- end meta -->
+                <span>برچسب ها</span>
+                {% for tag in tags %}
+                <small><a href='{% url "blog:tag_list" tag.slug %}' title="">{{tag.name}}</a></small>
+                {% endfor %}
+                
+                </div><!-- end meta -->
 
             <div class="post-sharing">
                 <ul class="list-inline">

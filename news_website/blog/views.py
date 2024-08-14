@@ -3,11 +3,12 @@ from .models import Post, Category, Comment
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from .forms import CommentForm
+from taggit.models import Tag
 
 # Create your views here.
 
 
-def post_list(request, category_slug=None, author_pk=None):
+def post_list(request, category_slug=None, author_pk=None, tag_slug=None):
     posts = Post.objects.filter(status="published")
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
@@ -16,6 +17,10 @@ def post_list(request, category_slug=None, author_pk=None):
     if author_pk:
         user = get_object_or_404(User, pk=author_pk)
         posts = posts.filter(author=user)
+
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags=tag)
     return render(request, "blog/index.html", {"posts": posts})
 
 
@@ -29,6 +34,7 @@ def post_detail(request, year, month, day, slug, comment_id=None):
         slug=slug,
         status="published",
     )
+    tags = post.tags.all()
     comments = post.comments.filter(active=True)
     if request.method == "POST":
         if comment_id:
@@ -44,12 +50,16 @@ def post_detail(request, year, month, day, slug, comment_id=None):
     else:
         comment_form = CommentForm()
         if comment_id:
-            print("*" * 20)
             comment = get_object_or_404(Comment, id=comment_id)
             comment_form = CommentForm(instance=comment)
 
     return render(
         request,
         "blog/single.html",
-        {"post": post, "comments": comments, "comment_form": comment_form},
+        {
+            "post": post,
+            "comments": comments,
+            "comment_form": comment_form,
+            "tags": tags,
+        },
     )
