@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from .forms import CommentForm
 from taggit.models import Tag
+from django.db.models import Count
 
 # Create your views here.
 
@@ -36,6 +37,14 @@ def post_detail(request, year, month, day, slug, comment_id=None):
     )
     tags = post.tags.all()
     comments = post.comments.filter(active=True)
+    post_tags_id = post.tags.values_list("id", flat=True)
+    similar_posts = Post.objects.filter(
+        status="published", tags__in=post_tags_id
+    ).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+        "-same_tags", "-publish"
+    )[:5]
+
     if request.method == "POST":
         if comment_id:
             comment = get_object_or_404(Comment, id=comment_id)
@@ -61,5 +70,6 @@ def post_detail(request, year, month, day, slug, comment_id=None):
             "comments": comments,
             "comment_form": comment_form,
             "tags": tags,
+            "similar_posts": similar_posts,
         },
     )

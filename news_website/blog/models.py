@@ -30,7 +30,7 @@ class Post(models.Model):
     title = models.CharField(max_length=250, verbose_name="عنوان")
     category = models.ManyToManyField(Category, verbose_name="دسته بندی")
     thumbnail = models.ImageField(
-        upload_to="image/%y/%m/%d", null=True, blank=True, verbose_name="تصویر"
+        upload_to="image", null=True, blank=True, verbose_name="تصویر"
     )
     slug = models.SlugField(max_length=300, unique=True, allow_unicode=True)
     body = models.TextField(verbose_name="متن", null=True)
@@ -79,8 +79,13 @@ class Post(models.Model):
         return jalali_converter(self.publish)
 
     def save(self, *args, **kwargs):
-        thumbnail = self.thumbnail
-
+        slug = ""
+        for char in self.title:
+            if char.isalpha():
+                slug += char
+            elif char == " ":
+                slug += "-"
+        self.slug = slug
         super().save(*args, **kwargs)
 
 
