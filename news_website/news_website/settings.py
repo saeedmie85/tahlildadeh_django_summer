@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # my apps
     "blog.apps.BlogConfig",
     "extensions",
+    "accounts.apps.AccountsConfig",
     # libraries
     "taggit",
 ]
@@ -108,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "fa-ir"
+LANGUAGE_CODE = "fa-ir"  # changed
 
 TIME_ZONE = "Asia/Tehran"
 
@@ -131,3 +132,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+AUTH_USER_MODEL = "accounts.User"
