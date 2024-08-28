@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "blog.apps.BlogConfig",
     "extensions",
     "accounts.apps.AccountsConfig",
+    "cadmin.apps.CadminConfig",
     # libraries
     "taggit",
 ]
