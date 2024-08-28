@@ -144,15 +144,12 @@ class UserRegistrationForm(forms.Form):
     def clean_phone_number(self):
         """Reject usernames that differ only in case."""
         phone_number = self.cleaned_data.get("phone_number")
-        if (
-            phone_number
-            and self._meta.model.objects.filter(phone_number=phone_number).exists()
-        ):
+        if phone_number and User.objects.filter(phone_number=phone_number).exists():
             self._update_errors(
                 ValidationError(
                     {
                         "phone_number": self.instance.unique_error_message(
-                            self._meta.model, ["phone_number"]
+                            User, ["phone_number"]
                         )
                     }
                 )
@@ -163,14 +160,10 @@ class UserRegistrationForm(forms.Form):
     def clean_email(self):
         """Reject usernames that differ only in case."""
         email = self.cleaned_data.get("email")
-        if email and self._meta.model.objects.filter(email=email).exists():
+        if email and User.objects.filter(email=email).exists():
             self._update_errors(
                 ValidationError(
-                    {
-                        "email": self.instance.unique_error_message(
-                            self._meta.model, ["email"]
-                        )
-                    }
+                    {"email": self.instance.unique_error_message(User, ["email"])}
                 )
             )
         else:
@@ -179,3 +172,12 @@ class UserRegistrationForm(forms.Form):
 
 class VerifyCodeForm(forms.Form):
     code = forms.IntegerField()
+
+
+class LoginForm(forms.Form):
+    phone_number = forms.CharField(max_length=11)
+    password = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "new-password"}),
+    )
