@@ -8,3 +8,4 @@ from django.views.generic import ListView
 class PostList(ListView):
     model = Post
     template_name = "cadmin/index.html"
+    context_object_name = "posts"
