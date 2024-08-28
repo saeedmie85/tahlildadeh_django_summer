@@ -7,4 +7,4 @@ from django.views.generic import ListView
 
 class PostList(ListView):
     model = Post
-    template_name = "cadmin/home.html"
+    template_name = "cadmin/index.html"
